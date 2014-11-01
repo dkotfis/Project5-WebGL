@@ -29,7 +29,7 @@ Here are some screenshots of the vertex shaders from part 1.
 
 Here are some screenshots of the fragment globe shaders from part 2. The first is without the altitude shading, and the other includes it.
 
-![WebGL Globe] (resources/NoElevationShading.png]
+![WebGL Globe] (resources/NoElevationShading.png)
 
 ![WebGL Globe With Extended Features] (resources/ElevationShading.png)
 
