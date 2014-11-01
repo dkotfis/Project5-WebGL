@@ -25,12 +25,12 @@ Here are some screenshots of the vertex shaders from part 1.
 
 ![Sine Wave Vertex Shader](resources/SinWave.png)
 
-<img src="https://raw.github.com/dkotfis/Project5-WebGL/resources/Gaussians.png" "Gaussian Vertex Shader">
+![Gaussian Vertex Shader] (resources/Gaussians.png)
 
 Here are some screenshots of the fragment globe shaders from part 2. The first is without the altitude shading, and the other includes it.
 
-<img src="https://raw.github.com/dkotfis/Project5-WebGL/resources/NoElevationShading.png" "WebGL Globe">
+![WebGL Globe] (resources/NoElevationShading.png]
 
-<img src="https://raw.github.com/dkotfis/Project5-WebGL/resources/ElevationShading.png" "WebGL Globe With Extended Features">
+![WebGL Globe With Extended Features] (resources/ElevationShading.png)
 
 ##Performance Evaluation
