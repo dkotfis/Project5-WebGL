@@ -1,7 +1,7 @@
 ﻿<html>
 
 <head>
-<title>Vertex Wave</title>
+<title>Moving Gaussian</title>
 <meta charset ="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">  <!-- Use Chrome Frame in IE --> 
 </head>
@@ -17,7 +17,9 @@
     attribute vec2 position;
     
     uniform mat4 u_modelViewPerspective;
-    uniform float u_time;
+    uniform vec2 u_center1;
+    uniform vec2 u_center2;
+    uniform float u_width;
     uniform vec3 u_color1;
     uniform vec3 u_color2;
 
@@ -25,11 +27,10 @@
     
     void main(void)
     {
-      float s_contrib = sin(position.x*2.0*3.14159 + u_time);
-      float t_contrib = cos(position.y*2.0*3.14159 + u_time);
-      float height = s_contrib*t_contrib;
+      float radius1 = pow(length(u_center1 - position), 2.0);
+      float radius2 = pow(length(u_center2 - position), 2.0);
+      float height = 0.5 + 0.5*exp(-radius1/u_width) - 0.5*exp(-radius2/u_width);
 
-      // NOTE : gl_Position is always a vec4
       gl_Position = u_modelViewPerspective * vec4(vec3(position, height), 1.0);
 
       fs_color = mix(u_color1, u_color2, height);
@@ -52,7 +53,9 @@
   var positionLocation = 0;
   var heightLocation = 1;
   var u_modelViewPerspectiveLocation;
-  var u_timeLocation;
+  var u_center1Location;
+  var u_center2Location;
+  var u_widthLocation;
   var u_color1Location;
   var u_color2Location;
   
@@ -70,6 +73,9 @@
 
   var NUM_WIDTH_PTS = 100;
   var NUM_HEIGHT_PTS = 100;
+
+  var gaussCenter = [0.5, 0.5];
+  var gaussWidth = 0.05;
 
   var message;
   var canvas;
@@ -129,7 +135,13 @@
     context.clear(context.COLOR_BUFFER_BIT | context.DEPTH_BUFFER_BIT);
 
     context.uniformMatrix4fv(u_modelViewPerspectiveLocation, false, mvp);
-    context.uniform1f(u_timeLocation, time);
+    gaussCenter[0] = 0.5 + 0.30 * Math.cos(time);
+    gaussCenter[1] = 0.5 + 0.20 * Math.sin(time);
+    context.uniform2fv(u_center1Location, gaussCenter);
+    gaussCenter[0] = 0.5 - 0.20 * Math.cos(-1.3333*time);
+    gaussCenter[1] = 0.5 - 0.30 * Math.sin(-1.3333*time);
+    context.uniform2fv(u_center2Location, gaussCenter);
+    context.uniform1f(u_widthLocation, gaussWidth);
     var col1 = [color1[0] / 255.0, color1[1] / 255.0, color1[2] / 255.0];
     var col2 = [color2[0] / 255.0, color2[1] / 255.0, color2[2] / 255.0];
     context.uniform3fv(u_color1Location, col1);
@@ -139,7 +151,7 @@
     window.requestAnimFrame(animate);
 
     // Update the timestep
-    time += 0.01;
+    time += 0.03;
   }
 
   function initializeShader() {
@@ -150,7 +162,9 @@
 	var program = createProgram(context, vs, fs, message);
 	context.bindAttribLocation(program, positionLocation, "position");
 	u_modelViewPerspectiveLocation = context.getUniformLocation(program, "u_modelViewPerspective");
-	u_timeLocation = context.getUniformLocation(program, "u_time");
+	u_center1Location = context.getUniformLocation(program, "u_center1");
+	u_center2Location = context.getUniformLocation(program, "u_center2");
+	u_widthLocation = context.getUniformLocation(program, "u_width");
 	u_color1Location = context.getUniformLocation(program, "u_color1");
 	u_color2Location = context.getUniformLocation(program, "u_color2");
 
