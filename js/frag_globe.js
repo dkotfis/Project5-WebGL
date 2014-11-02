@@ -237,7 +237,6 @@
     function animate() {
         ///////////////////////////////////////////////////////////////////////////
         // Update
-
         var model = mat4.create();
         mat4.identity(model);
         mat4.rotate(model, 23.4/180*Math.PI, [0.0, 0.0, 1.0]);
